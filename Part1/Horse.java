@@ -3,7 +3,7 @@ import java.lang.classfile.instruction.ThrowInstruction;
 
 
 /**
- * Write a description of class Horse here.
+ * Stores the necessary information about the horse and provides the abity to edit the features of the horses
  * 
  * @author (Damian Lemke) 
  * @version (1.0)
