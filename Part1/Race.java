@@ -67,6 +67,12 @@ public class Race
         boolean finished = false;
         
         //reset all the lanes (all horses not fallen and back to 0). 
+        lane3Horse.goBackToStart();
+        if ((lane1Horse == null) || (lane2Horse == null) ||  (lane3Horse == null)) 
+        {
+            System.out.println("Empty lane");
+            return;
+        }
         lane1Horse.goBackToStart();
         lane2Horse.goBackToStart();
         lane3Horse.goBackToStart();
@@ -139,6 +145,7 @@ public class Race
     {
         if (theHorse.getDistanceTravelled() == raceLength)
         {
+            System.out.println("The winner is " + theHorse.getName());
             return true;
         }
         else
