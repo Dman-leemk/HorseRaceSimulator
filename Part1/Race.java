@@ -118,7 +118,7 @@ public class Race
             printRace();
             
             //if any of the three horses has won the race is finished
-            if ( raceWonBy(lane1Horse) || raceWonBy(lane2Horse) || raceWonBy(lane3Horse) )
+            if ( raceWonBy(lane1Horse) | raceWonBy(lane2Horse) | raceWonBy(lane3Horse) )
             {
                 finished = true;
             }
