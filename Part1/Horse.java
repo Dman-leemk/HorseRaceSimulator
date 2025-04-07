@@ -1,7 +1,4 @@
 
-import java.lang.classfile.instruction.ThrowInstruction;
-
-
 /**
  * Stores the necessary information about the horse and provides the abity to edit the features of the horses
  * 
