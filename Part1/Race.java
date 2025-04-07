@@ -13,7 +13,7 @@ public class Race
     private Horse lane1Horse;
     private Horse lane2Horse;
     private Horse lane3Horse;
-
+    final static double confidenceModifer = 0.02;
     /**
      * Constructor for objects of class Race
      * Initially there are no horses in the lanes
@@ -22,6 +22,12 @@ public class Race
      */
     public Race(int distance)
     {
+        // if distance is negative set it to zero
+        if (distance<0)
+        {
+            System.out.print("Distance must be postive");
+            distance = 0;
+        }
         // initialise instance variables
         raceLength = distance;
         lane1Horse = null;
@@ -29,6 +35,29 @@ public class Race
         lane3Horse = null;
     }
     
+    /**
+     * Changes the confidence of the horseClass
+     * 
+     * @param theHorse the horse that should have its confidence changed 
+     * 
+     */
+
+    private void changeConfidence (Horse theHorse, boolean isIncrease)
+    {
+        double currentConfidence = theHorse.getConfidence();
+        
+        if (isIncrease) 
+        {
+            theHorse.setConfidence(currentConfidence + confidenceModifer);    
+        }
+        else
+        {
+            theHorse.setConfidence(currentConfidence - confidenceModifer);   
+        }
+         
+    }
+
+
     /**
      * Adds a horse to the race in a given lane
      * 
@@ -66,13 +95,14 @@ public class Race
         //declare a local variable to tell us when the race is finished
         boolean finished = false;
         
-        //reset all the lanes (all horses not fallen and back to 0). 
-        lane3Horse.goBackToStart();
+        //checks if an lane is empty
         if ((lane1Horse == null) || (lane2Horse == null) ||  (lane3Horse == null)) 
         {
             System.out.println("Empty lane");
             return;
         }
+
+        //reset all the lanes (all horses not fallen and back to 0). 
         lane1Horse.goBackToStart();
         lane2Horse.goBackToStart();
         lane3Horse.goBackToStart();
