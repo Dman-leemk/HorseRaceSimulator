@@ -76,7 +76,14 @@ public class Horse
 
     public void setConfidence(double newConfidence)
     {
-        this.horseConfidence = newConfidence;
+        if ((0 < newConfidence) && (newConfidence < 1))
+        {
+            this.horseConfidence = newConfidence;
+        }
+        else
+        {
+            System.out.println("Confidence out of bounds");
+        }
     }
     
     public void setSymbol(char newSymbol)
@@ -85,3 +92,5 @@ public class Horse
     }
     
 }
+
+
