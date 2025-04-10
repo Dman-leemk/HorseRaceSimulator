@@ -72,29 +72,21 @@ public class race_Logic
 
 
     /**
-     * Adds a horse to the race in a given lane
+     * Adds a horse to the next empty lane returns false is no lanes are empty
      * 
      * @param theHorse the horse to be added to the race
-     * @param laneNumber the lane that the horse will be added to
      */
-    public void addHorse(Horse theHorse, int laneNumber)
+    public boolean  addHorse(Horse theHorse)
     {
-        if (laneNumber == 1)
+        for (int i = 0; i < lanes.length; i++)
         {
-            lane1Horse = theHorse;
+            if (lanes[i] == null)
+            {
+                lanes[i] = theHorse;
+                return true;
+            }
         }
-        else if (laneNumber == 2)
-        {
-            lane2Horse = theHorse;
-        }
-        else if (laneNumber == 3)
-        {
-            lane3Horse = theHorse;
-        }
-        else
-        {
-            System.out.println("Cannot add horse to lane " + laneNumber + " because there is no such lane");
-        }
+        return false;
     }
     
     /**
@@ -108,38 +100,51 @@ public class race_Logic
         //declare a local variable to tell us when the race is finished
         boolean finished = false;
         
-        //checks if an lane is empty
-        if ((lane1Horse == null) || (lane2Horse == null) ||  (lane3Horse == null)) 
-        {
-            System.out.println("Empty lane");
-            return;
-        }
 
         //reset all the lanes (all horses not fallen and back to 0). 
-        lane1Horse.goBackToStart();
-        lane2Horse.goBackToStart();
-        lane3Horse.goBackToStart();
+        for (Horse horse : lanes)
+        {
+            if (horse != null)
+            {
+                horse.goBackToStart();
+            }
+        }
                       
         while (!finished)
         {
             //move each horse
-            moveHorse(lane1Horse);
-            moveHorse(lane2Horse);
-            moveHorse(lane3Horse);
+            for (Horse horse : lanes)
+            {
+                if (horse != null)
+                {
+                    moveHorse(horse);
+                }
+            }
                         
             //print the race positions
             printRace();
             
-            //if any of the three horses has won the race is finished
-            if ( raceWonBy(lane1Horse) | raceWonBy(lane2Horse) | raceWonBy(lane3Horse) )
-            {
-                finished = true;
-            }
+           //If all horses have fallen end the race
+            boolean allHorsesFallen = true;
 
-            //If all horses have fallen end the race
-            if (lane1Horse.hasFallen() && lane2Horse.hasFallen() && lane3Horse.hasFallen())
+            for (Horse horse : lanes)
             {
-                finished = true;
+                if (horse != null)
+                {
+                    finished = allHorsesFallen && horse.hasFallen();
+                }
+            }
+            
+            //if any of the three horses has won the race is finished
+            for (Horse horse : lanes)
+            {
+                if (horse != null)
+                {
+                    if (raceWonBy(horse))
+                    {
+                        finished = true;
+                    }
+                }
             }
            
             //wait for 100 milliseconds
@@ -209,15 +214,13 @@ public class race_Logic
         multiplePrint('=',raceLength+3); //top edge of track
         System.out.println();
         
-        printLane(lane1Horse);
-        System.out.println();
-        
-        printLane(lane2Horse);
-        System.out.println();
-        
-        printLane(lane3Horse);
-        System.out.println();
-        
+
+        for (Horse horse : lanes)
+        {
+            printLane(horse);
+            System.out.println();
+        }
+
         multiplePrint('=',raceLength+3); //bottom edge of track
         System.out.println();    
     }
@@ -230,11 +233,21 @@ public class race_Logic
      */
     private void printLane(Horse theHorse)
     {
+        int spacesBefore;
+        int spacesAfter;
+
         //calculate how many spaces are needed before
         //and after the horse
-        int spacesBefore = theHorse.getDistanceTravelled();
-        int spacesAfter = raceLength - theHorse.getDistanceTravelled();
-        
+        if (theHorse != null)
+        {
+            spacesBefore = theHorse.getDistanceTravelled();
+            spacesAfter = this.raceLength - theHorse.getDistanceTravelled();
+        }
+        else
+        {
+            spacesBefore =0;
+            spacesAfter = this.raceLength;
+        }
         //print a | for the beginning of the lane
         System.out.print('|');
         
@@ -243,13 +256,16 @@ public class race_Logic
         
         //if the horse has fallen then print dead
         //else print the horse's symbol
-        if(theHorse.hasFallen())
+        if (theHorse != null)
         {
-            System.out.print('\u2322');
-        }
-        else
-        {
-            System.out.print(theHorse.getSymbol());
+            if(theHorse.hasFallen())
+            {
+                System.out.print('\u2322');
+            }
+            else
+            {
+                System.out.print(theHorse.getSymbol());
+            }
         }
         
         //print the spaces after the horse
