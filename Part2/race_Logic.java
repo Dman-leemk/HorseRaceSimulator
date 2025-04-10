@@ -122,7 +122,7 @@ public class race_Logic
             }
                         
             //print the race positions
-            printRace();
+            gui.setScreen(printRace());
             
            //If all horses have fallen end the race
             boolean allHorsesFallen = true;
@@ -207,22 +207,25 @@ public class race_Logic
     /***
      * Print the race on the terminal
      */
-    private void printRace()
+    private String printRace()
     {
-        System.out.print('\u000C');  //clear the terminal window
+        String race = "";
         
-        multiplePrint('=',raceLength+3); //top edge of track
-        System.out.println();
+        race = race + multipleChars('=',raceLength+3); //top edge of track
+        race = race + '\n';
         
-
         for (Horse horse : lanes)
         {
-            printLane(horse);
-            System.out.println();
+            if (horse != null)
+            {
+                race = race + printLane(horse);
+                race = race + '\n';
+            }
         }
 
-        multiplePrint('=',raceLength+3); //bottom edge of track
-        System.out.println();    
+        race = race + multipleChars('=',raceLength+3); //bottom edge of track
+        race = race + '\n';
+        return race;    
     }
     
     /**
@@ -231,10 +234,11 @@ public class race_Logic
      * |           X                      |
      * to show how far the horse has run
      */
-    private void printLane(Horse theHorse)
+    private String printLane(Horse theHorse)
     {
         int spacesBefore;
         int spacesAfter;
+        String lane;
 
         //calculate how many spaces are needed before
         //and after the horse
@@ -249,10 +253,10 @@ public class race_Logic
             spacesAfter = this.raceLength;
         }
         //print a | for the beginning of the lane
-        System.out.print('|');
+        lane = "|";
         
         //print the spaces before the horse
-        multiplePrint(' ',spacesBefore);
+        lane = lane + multipleChars(' ',spacesBefore);
         
         //if the horse has fallen then print dead
         //else print the horse's symbol
@@ -260,37 +264,41 @@ public class race_Logic
         {
             if(theHorse.hasFallen())
             {
-                System.out.print('\u2322');
+                lane = lane + '\u2322';
             }
             else
             {
-                System.out.print(theHorse.getSymbol());
+                lane = lane + theHorse.getSymbol();
             }
         }
         
-        //print the spaces after the horse
-        multiplePrint(' ',spacesAfter);
+         //print the spaces after the horse
+        lane = lane + multipleChars(' ',spacesAfter);
         
         //print the | for the end of the track
-        System.out.print('|');
-
-        System.out.print("     " + theHorse.getName() + " (Current confidence " + theHorse.getConfidence() + ")");
+        lane = lane +  '|';
+        if (theHorse != null)
+        {
+            lane = lane + "     " + theHorse.getName() + " (Current confidence " + theHorse.getConfidence() + ")";
+        }
+        return lane;
     }
         
     
     /***
-     * print a character a given number of times.
+     * returns a string of a character repeated a given number of times.
      * e.g. printmany('x',5) will print: xxxxx
      * 
      * @param aChar the character to Print
+     * @param times the number of times
      */
-    private void multiplePrint(char aChar, int times)
+    private String multipleChars(char aChar, int times)
     {
-        int i = 0;
-        while (i < times)
+        String word = "";
+        for (int i = 0; i<times;i++)
         {
-            System.out.print(aChar);
-            i = i + 1;
+            word = word + aChar;
         }
+        return word;
     }
 }
