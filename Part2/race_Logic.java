@@ -19,7 +19,7 @@ public class race_Logic
      * 
      * @param raceLength
      */
-    private void setRaceLength (int raceLength)
+    public void setRaceLength (int raceLength)
     {
         this.raceLength = raceLength;
     }
@@ -29,7 +29,7 @@ public class race_Logic
      * 
      * @param raceLength
      */
-    private void setLanes (int laneCount)
+    public void setLanes (int laneCount)
     {
         this.lanes = new Horse[laneCount];
     }
