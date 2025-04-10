@@ -14,6 +14,7 @@ public class Race
     private Horse lane2Horse;
     private Horse lane3Horse;
     final static double confidenceModifer = 0.02;
+
     /**
      * Constructor for objects of class Race
      * Initially there are no horses in the lanes
@@ -39,6 +40,8 @@ public class Race
      * Changes the confidence of the horseClass
      * 
      * @param theHorse the horse that should have its confidence changed 
+     * @param isIncrease tells if the confidence is to be increased or decreased
+     * 
      * 
      */
 
