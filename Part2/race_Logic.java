@@ -9,32 +9,42 @@ import java.util.concurrent.TimeUnit;
  */
 public class race_Logic
 {
+    private Main_gui gui;
     private int raceLength;
-    private Horse lane1Horse;
-    private Horse lane2Horse;
-    private Horse lane3Horse;
+    private Horse[] lanes = null;
     final static double confidenceModifer = 0.02;
+    
+    /***
+     * sets the race length
+     * 
+     * @param raceLength
+     */
+    private void setRaceLength (int raceLength)
+    {
+        this.raceLength = raceLength;
+    }
+
+    /***
+     * sets the number of lanes
+     * 
+     * @param raceLength
+     */
+    private void setLanes (int laneCount)
+    {
+        this.lanes = new Horse[laneCount];
+    }
 
     /**
      * Constructor for objects of class Race
-     * Initially there are no horses in the lanes
      * 
-     * @param distance the length of the racetrack (in metres/yards...)
+     * @param gui the gui to print the race too
      */
-    public race_Logic(int distance)
+
+    public race_Logic(Main_gui gui)
     {
-        // if distance is negative set it to zero
-        if (distance<0)
-        {
-            System.out.print("Distance must be postive");
-            distance = 0;
-        }
-        // initialise instance variables
-        raceLength = distance;
-        lane1Horse = null;
-        lane2Horse = null;
-        lane3Horse = null;
-    }
+        this.gui = gui;
+        this.raceLength = 0;
+    } 
     
     /**
      * Changes the confidence of the horseClass
