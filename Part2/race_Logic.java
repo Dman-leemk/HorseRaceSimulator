@@ -78,7 +78,7 @@ public class race_Logic
      */
     public boolean  addHorse(Horse theHorse)
     {
-        for (int i = 0; i < lanes.length; i++)
+        for (int i = 0; i < this.lanes.length; i++)
         {
             if (lanes[i] == null)
             {
@@ -102,7 +102,7 @@ public class race_Logic
         
 
         //reset all the lanes (all horses not fallen and back to 0). 
-        for (Horse horse : lanes)
+        for (Horse horse : this.lanes)
         {
             if (horse != null)
             {
@@ -113,7 +113,7 @@ public class race_Logic
         while (!finished)
         {
             //move each horse
-            for (Horse horse : lanes)
+            for (Horse horse : this.lanes)
             {
                 if (horse != null)
                 {
@@ -127,7 +127,7 @@ public class race_Logic
            //If all horses have fallen end the race
             boolean allHorsesFallen = true;
 
-            for (Horse horse : lanes)
+            for (Horse horse : this.lanes)
             {
                 if (horse != null)
                 {
@@ -136,7 +136,7 @@ public class race_Logic
             }
             
             //if any of the three horses has won the race is finished
-            for (Horse horse : lanes)
+            for (Horse horse : this.lanes)
             {
                 if (horse != null)
                 {
@@ -211,19 +211,15 @@ public class race_Logic
     {
         String race = "";
         
-        race = race + multipleChars('=',raceLength+3); //top edge of track
+        race = race + multipleChars('=',this.raceLength); //top edge of track
         race = race + '\n';
         
-        for (Horse horse : lanes)
-        {
-            if (horse != null)
-            {
-                race = race + printLane(horse);
-                race = race + '\n';
-            }
+        for (Horse lane : this.lanes) {
+            race = race + printLane(lane);
+            race = race + '\n';
         }
 
-        race = race + multipleChars('=',raceLength+3); //bottom edge of track
+        race = race + multipleChars('=',this.raceLength); //bottom edge of track
         race = race + '\n';
         return race;    
     }
@@ -270,6 +266,10 @@ public class race_Logic
             {
                 lane = lane + theHorse.getSymbol();
             }
+        }
+        else
+        {
+            lane = lane + " ";
         }
         
          //print the spaces after the horse
