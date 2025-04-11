@@ -5,11 +5,11 @@ import javax.swing.*;
 public class Main_gui {
 
 private static final JTextArea  raceScreen = new JTextArea("");
-private static race_Logic logic;
+private  race_Logic logic;
 
 public Main_gui () {
 // Create a JFrame
-JFrame frame = new JFrame("GridLayout Demo");
+JFrame frame = new JFrame("Horse Simulator");
 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 frame.setSize(1000, 700);
 
@@ -44,9 +44,9 @@ public void setScreen (String text)
     raceScreen.setText(text);
 }
 
-public void setLogic (race_Logic logic)
+public void setLogic (race_Logic newLogic)
 {
-    this.logic = logic;
+    this.logic = newLogic;
 }
 
 }
