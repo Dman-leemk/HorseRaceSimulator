@@ -4,7 +4,8 @@ import javax.swing.*;
 
 public class Main_gui {
 
-private static final JTextArea  raceScreen = new JTextArea("TextField 2");
+private static final JTextArea  raceScreen = new JTextArea("");
+private static race_Logic logic;
 
 public Main_gui () {
 // Create a JFrame
@@ -21,12 +22,15 @@ buttonList.add(new JButton("Customise Horses"));
 buttonList.add(new JButton("View Stats"));
 buttonList.add(new JButton("Betting"));
 
+// creates the start race button
+JButton startBtn = new JButton("Start race");
+startBtn.addActionListener(e -> logic.startRace());
 // Layouts out the various sections
 // Create a JPanel with GridLayout
 JPanel fullPanel = new JPanel(new BorderLayout());
 fullPanel.add(buttonList, BorderLayout.WEST);
 fullPanel.add(raceScreen, BorderLayout.CENTER);
-fullPanel.add(new JButton("Start race"), BorderLayout.SOUTH);
+fullPanel.add(startBtn, BorderLayout.SOUTH);
 
 // Add the panel to the frame
 frame.add(fullPanel);
@@ -38,6 +42,11 @@ frame.setVisible(true);
 public void setScreen (String text)
 {
     raceScreen.setText(text);
+}
+
+public void setLogic (race_Logic logic)
+{
+    this.logic = logic;
 }
 
 }
