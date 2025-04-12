@@ -19,6 +19,7 @@ startBtn.addActionListener(e -> logic.startRace());
 
 // creates the Track button
 JButton trackBtn = new JButton("Customise Track");
+trackBtn.addActionListener(e -> new LaneSelection_gui(logic));
 
 // creates the Horse button
 JButton horseBtn = new JButton("Customise Horses");
