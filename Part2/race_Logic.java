@@ -87,6 +87,12 @@ public class race_Logic
      */
     public void startRace()
     {
+        if (this.currentTrack == null)
+        {
+            new errorBox("Create a race first");
+            return;
+        }
+
         //declare a local variable to tell us when the race is finished
         boolean finished = false;
         
@@ -99,7 +105,6 @@ public class race_Logic
         {
             if (horse != null)
             {
-                System.out.println(currentTrack.getlength() + "");
                 horse.goBackToStart();
             }
         }
@@ -143,7 +148,7 @@ public class race_Logic
            
             //wait for 100 milliseconds
             try{ 
-                TimeUnit.MILLISECONDS.sleep(10);
+                TimeUnit.MILLISECONDS.sleep(100);
             }catch(Exception e){}
         }
     }
