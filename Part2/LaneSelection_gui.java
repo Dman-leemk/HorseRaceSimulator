@@ -56,8 +56,6 @@ raceShapeRow.add(raceShapelabel);
 
 this.shapeList = new JList();
 this.shapeList.setListData((String[])LISTOFSHAPES);
-// this.shapeListScrollable = new JScrollPane(shapeList);
-// this.shapeListScrollable.setPreferredSize(new Dimension(100, 20));
 raceShapeRow.add(this.shapeList);
 
 // Track condition
@@ -69,8 +67,6 @@ raceConditionRow.add(raceConditionlabel);
 
 this.conditionList = new JList();
 this.conditionList.setListData((String[])LISTOFCONDITIONS);
-// this.conditionListScrollable = new JScrollPane(conditionList);
-// this.conditionListScrollable.setPreferredSize(new Dimension(100, 20));
 raceConditionRow.add(this.conditionList);
 
 // submit btn
