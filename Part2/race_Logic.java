@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 public class race_Logic
 {
     private Main_gui gui;
-    private int raceLength;
-    private Horse[] lanes = null;
+    private Horse[] horses = null;
+    private track currentTrack;
     final static double confidenceModifer = 0.02;
     
     /***
@@ -19,19 +19,10 @@ public class race_Logic
      * 
      * @param raceLength
      */
-    public void setRaceLength (int raceLength)
+    public void setRaceTrack (track newTrack)
     {
-        this.raceLength = raceLength;
-    }
-
-    /***
-     * sets the number of lanes
-     * 
-     * @param raceLength
-     */
-    public void setLanes (int laneCount)
-    {
-        this.lanes = new Horse[laneCount];
+        this.currentTrack = newTrack;
+        this.horses = new Horse[newTrack.getlaneCount()];
     }
 
     /**
@@ -43,7 +34,6 @@ public class race_Logic
     public race_Logic(Main_gui gui)
     {
         this.gui = gui;
-        this.raceLength = 0;
     } 
     
     /**
@@ -76,13 +66,13 @@ public class race_Logic
      * 
      * @param theHorse the horse to be added to the race
      */
-    public boolean  addHorse(Horse theHorse)
+    public boolean addHorse(Horse theHorse)
     {
-        for (int i = 0; i < this.lanes.length; i++)
+        for (int i = 0; i < this.horses.length; i++)
         {
-            if (lanes[i] == null)
+            if (this.horses[i] == null)
             {
-                lanes[i] = theHorse;
+                this.horses[i] = theHorse;
                 return true;
             }
         }
@@ -100,12 +90,16 @@ public class race_Logic
         //declare a local variable to tell us when the race is finished
         boolean finished = false;
         
+        // temporay testing
+        addHorse(new Horse('#',"Horsey",0.8));
+        addHorse(new Horse('%',"Pony",0.4));
 
         //reset all the lanes (all horses not fallen and back to 0). 
-        for (Horse horse : this.lanes)
+        for (Horse horse : this.horses)
         {
             if (horse != null)
             {
+                System.out.println(currentTrack.getlength() + "");
                 horse.goBackToStart();
             }
         }
@@ -113,7 +107,7 @@ public class race_Logic
         while (!finished)
         {
             //move each horse
-            for (Horse horse : this.lanes)
+            for (Horse horse : this.horses)
             {
                 if (horse != null)
                 {
@@ -122,12 +116,12 @@ public class race_Logic
             }
                         
             //print the race positions
-            gui.setScreen(printRace());
+            gui.setScreen(currentTrack.printRace(this.horses));
             
            //If all horses have fallen end the race
             boolean allHorsesFallen = true;
 
-            for (Horse horse : this.lanes)
+            for (Horse horse : this.horses)
             {
                 if (horse != null)
                 {
@@ -136,7 +130,7 @@ public class race_Logic
             }
             
             //if any of the three horses has won the race is finished
-            for (Horse horse : this.lanes)
+            for (Horse horse : this.horses)
             {
                 if (horse != null)
                 {
@@ -149,7 +143,7 @@ public class race_Logic
            
             //wait for 100 milliseconds
             try{ 
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(10);
             }catch(Exception e){}
         }
     }
@@ -192,7 +186,7 @@ public class race_Logic
      */
     private boolean raceWonBy(Horse theHorse)
     {
-        if (theHorse.getDistanceTravelled() >= raceLength)
+        if (theHorse.getDistanceTravelled() >= currentTrack.getlength())
         {
             changeConfidence(theHorse,true);
             System.out.println("The winner is " + theHorse.getName());
@@ -202,103 +196,5 @@ public class race_Logic
         {
             return false;
         }
-    }
-    
-    /***
-     * Print the race on the terminal
-     */
-    private String printRace()
-    {
-        String race = "";
-        
-        race = race + multipleChars('=',this.raceLength); //top edge of track
-        race = race + '\n';
-        
-        for (Horse lane : this.lanes) {
-            race = race + printLane(lane);
-            race = race + '\n';
-        }
-
-        race = race + multipleChars('=',this.raceLength); //bottom edge of track
-        race = race + '\n';
-        return race;    
-    }
-    
-    /**
-     * print a horse's lane during the race
-     * for example
-     * |           X                      |
-     * to show how far the horse has run
-     */
-    private String printLane(Horse theHorse)
-    {
-        int spacesBefore;
-        int spacesAfter;
-        String lane;
-
-        //calculate how many spaces are needed before
-        //and after the horse
-        if (theHorse != null)
-        {
-            spacesBefore = theHorse.getDistanceTravelled();
-            spacesAfter = this.raceLength - theHorse.getDistanceTravelled();
-        }
-        else
-        {
-            spacesBefore =0;
-            spacesAfter = this.raceLength;
-        }
-        //print a | for the beginning of the lane
-        lane = "|";
-        
-        //print the spaces before the horse
-        lane = lane + multipleChars(' ',spacesBefore);
-        
-        //if the horse has fallen then print dead
-        //else print the horse's symbol
-        if (theHorse != null)
-        {
-            if(theHorse.hasFallen())
-            {
-                lane = lane + '\u2322';
-            }
-            else
-            {
-                lane = lane + theHorse.getSymbol();
-            }
-        }
-        else
-        {
-            lane = lane + " ";
-        }
-        
-         //print the spaces after the horse
-        lane = lane + multipleChars(' ',spacesAfter);
-        
-        //print the | for the end of the track
-        lane = lane +  '|';
-        if (theHorse != null)
-        {
-            lane = lane + "     " + theHorse.getName() + " (Current confidence " + theHorse.getConfidence() + ")";
-        }
-        return lane;
-    }
-        
-    
-    /***
-     * returns a string of a character repeated a given number of times.
-     * e.g. printmany('x',5) will print: xxxxx
-     * 
-     * @param aChar the character to Print
-     * @param times the number of times
-     */
-    private String multipleChars(char aChar, int times)
-    {
-        String word = "";
-        for (int i = 0; i<times;i++)
-        {
-            word = word + aChar;
-        }
-        return word;
     }
 }
