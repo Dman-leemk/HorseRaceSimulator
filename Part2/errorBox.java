@@ -6,7 +6,7 @@ public class errorBox
     {
         JFrame frame = new JFrame("Error");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(300, 500);
+        frame.setSize(200, 100);
 
         frame.add(new JLabel(message));
 
