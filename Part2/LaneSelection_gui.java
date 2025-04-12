@@ -22,7 +22,7 @@ this.raceLogic = raceLogic;
 
 // Create a JFrame
 JFrame frame = new JFrame("Track settings");
-frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
 frame.setSize(300, 500);
 
 // lane count row
@@ -89,37 +89,41 @@ frame.add(optionList);
 frame.setVisible(true);
 }
 
-private boolean createNewRace ()
+private void createNewRace ()
 {
-    int length;
+    int length = 0;
 
     try 
     {
         length = Integer.parseInt(raceLengthBox.getText());
+
+        if (length < 1)
+        {
+            new errorBox("Enter a valid length");
+            return;
+        }
     }
     catch (NumberFormatException nfe)
     {
-        // error
-        return false;
+        new errorBox("Enter a number for length");
+        return;
     }
 
     if (this.shapeList.getSelectedIndex() == -1)
     {
-        // error
-        return false;
+        new errorBox("Select a shape");
+        return;
     }
 
      if (this.conditionList.getSelectedIndex() == -1)
     {
-        // error
-        return false;
+        new errorBox("Select a condition");
+        return;
+
     }
 
     
     raceLogic.setRaceTrack(new track(this.laneCount.getValue(),length,  LISTOFSHAPES[this.shapeList.getSelectedIndex()], LISTOFCONDITIONS[this.conditionList.getSelectedIndex()]));
-    System.out.println(this.laneCount.getValue());
-
-    return true;
 }
 
 }
