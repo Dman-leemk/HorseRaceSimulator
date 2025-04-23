@@ -22,9 +22,6 @@ public class currentRaceInfo
     {
         this.currentTrack = newTrack;
         this.horses = new Horse[newTrack.getlaneCount()];
-        // temporay testing
-        addHorse(new Horse('#',"Horsey",0.8));
-        addHorse(new Horse('%',"Pony",0.4));
     }
 
     /**
@@ -45,5 +42,21 @@ public class currentRaceInfo
         new errorBox("Add more lanes or remove a horse");
 
         return false;
+    }
+
+    /**
+     * Removes a horse setting the lane empty
+     * 
+     * @param theHorse the horse to be removed from the race
+     */
+    public void removeHorse(Horse theHorse)
+    {
+        for (int i = 0; i < this.horses.length; i++)
+        {
+            if (this.horses[i] == theHorse)
+            {
+                this.horses[i] = null;
+            }
+        }
     }
 }

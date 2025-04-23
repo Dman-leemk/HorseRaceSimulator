@@ -22,7 +22,7 @@ trackBtn.addActionListener(e -> new LaneSelection_gui(raceInfo));
 
 // creates the Horse button
 JButton horseBtn = new JButton("Customise Horses");
-horseBtn.addActionListener(e -> new HorseCreation_gui(raceInfo));
+horseBtn.addActionListener(e -> new HorseMain_gui(raceInfo));
 
 // creates the Stats button
 JButton statsBtn = new JButton("View Stats");
