@@ -1,41 +1,76 @@
-import java.util.concurrent.TimeUnit;
+import java.awt.event.*;
+import javax.swing.*;
 
 /**
  * A three-horse race, each horse running in its own lane
  * for a given distance
  * 
  * @author McRaceface
- * @version 1.0
+ * @version 2
  */
-public class race_Logic
+public class race_GUI
 {
-    private Main_gui gui;
-    private Horse[] horses = null;
-    private track currentTrack;
+    private int delay = 1000;
+
+    private JTextArea gui;
+    private boolean isRaceFinished;
+
+    private ActionListener racePrint = new ActionListener() {
+    public void actionPerformed(ActionEvent evt) {
+         //print the race positions
+        gui.setText(raceInfo.getTrack().printRace(raceInfo.getHorses()));
+
+        //move each horse
+        for (Horse horse : raceInfo.getHorses())
+        {
+            if (horse != null)
+            {
+                moveHorse(horse);
+            }
+        }
+        
+        //If all horses have fallen end the race
+        boolean allHorsesFallen = true;
+
+        for (Horse horse : raceInfo.getHorses())
+        {
+            if (horse != null)
+            {
+                isRaceFinished = allHorsesFallen && horse.hasFallen();
+            }
+        }
+        
+        //if any of the three horses has won the race is finished
+        for (Horse horse : raceInfo.getHorses())
+        {
+            if (horse != null)
+            {
+                if (raceWonBy(horse))
+                {
+                    isRaceFinished = true;
+                }
+            }
+        }
+
+        if (isRaceFinished)
+        {
+            ((Timer)evt.getSource()).stop();
+        }
+        
+    }
+    };
+
+
+
     final static double confidenceModifer = 0.02;
+    private final currentRaceInfo raceInfo;
     
-    /***
-     * sets the race length
-     * 
-     * @param raceLength
-     */
-    public void setRaceTrack (track newTrack)
+    public race_GUI (currentRaceInfo raceInfo)
     {
-        this.currentTrack = newTrack;
-        this.horses = new Horse[newTrack.getlaneCount()];
+        this.raceInfo = raceInfo;
+        startRace();
     }
 
-    /**
-     * Constructor for objects of class Race
-     * 
-     * @param gui the gui to print the race too
-     */
-
-    public race_Logic(Main_gui gui)
-    {
-        this.gui = gui;
-    } 
-    
     /**
      * Changes the confidence of the horseClass
      * 
@@ -60,24 +95,6 @@ public class race_Logic
          
     }
 
-
-    /**
-     * Adds a horse to the next empty lane returns false is no lanes are empty
-     * 
-     * @param theHorse the horse to be added to the race
-     */
-    public boolean addHorse(Horse theHorse)
-    {
-        for (int i = 0; i < this.horses.length; i++)
-        {
-            if (this.horses[i] == null)
-            {
-                this.horses[i] = theHorse;
-                return true;
-            }
-        }
-        return false;
-    }
     
     /**
      * Start the race
@@ -87,70 +104,33 @@ public class race_Logic
      */
     public void startRace()
     {
-        if (this.currentTrack == null)
+        if (raceInfo.getTrack() == null)
         {
             new errorBox("Create a race first");
             return;
         }
 
         //declare a local variable to tell us when the race is finished
-        boolean finished = false;
-        
-        // temporay testing
-        addHorse(new Horse('#',"Horsey",0.8));
-        addHorse(new Horse('%',"Pony",0.4));
+        this.isRaceFinished = false;
 
         //reset all the lanes (all horses not fallen and back to 0). 
-        for (Horse horse : this.horses)
+        for (Horse horse : raceInfo.getHorses())
         {
             if (horse != null)
             {
                 horse.goBackToStart();
             }
         }
-                      
-        while (!finished)
-        {
-            //move each horse
-            for (Horse horse : this.horses)
-            {
-                if (horse != null)
-                {
-                    moveHorse(horse);
-                }
-            }
-                        
-            //print the race positions
-            gui.setScreen(currentTrack.printRace(this.horses));
-            
-           //If all horses have fallen end the race
-            boolean allHorsesFallen = true;
+        JFrame frame = new JFrame("Race");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(500, 350);
+        this.gui= new JTextArea();
+        // Add the panel to the frame
+        frame.add(this.gui);
+        // Set the frame visible
+        frame.setVisible(true);
 
-            for (Horse horse : this.horses)
-            {
-                if (horse != null)
-                {
-                    finished = allHorsesFallen && horse.hasFallen();
-                }
-            }
-            
-            //if any of the three horses has won the race is finished
-            for (Horse horse : this.horses)
-            {
-                if (horse != null)
-                {
-                    if (raceWonBy(horse))
-                    {
-                        finished = true;
-                    }
-                }
-            }
-           
-            //wait for 100 milliseconds
-            try{ 
-                TimeUnit.MILLISECONDS.sleep(100);
-            }catch(Exception e){}
-        }
+        new Timer(delay, racePrint).start();
     }
     
     /**
@@ -191,7 +171,7 @@ public class race_Logic
      */
     private boolean raceWonBy(Horse theHorse)
     {
-        if (theHorse.getDistanceTravelled() >= currentTrack.getlength())
+        if (theHorse.getDistanceTravelled() >= raceInfo.getHorses().length)
         {
             changeConfidence(theHorse,true);
             System.out.println("The winner is " + theHorse.getName());
