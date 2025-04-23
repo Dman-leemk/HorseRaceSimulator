@@ -11,11 +11,11 @@ final static String[] LISTOFHORSESHOES= {"light","heavy","normal"};
 final static String[] LISTOFBRIDLES= {"Snaffle ","Double","Bitless"};
 
 
-private JList breedList;
-private JList colourList;
-private JList saddleList;
-private JList horseShoeList;
-private JList bridleList;
+private JList<String> breedList;
+private JList<String> colourList;
+private JList<String> saddleList;
+private JList<String> horseShoeList;
+private JList<String> bridleList;
 private JTextArea symbolBox;
 private JTextArea nameBox;
 private JFrame frame;
@@ -46,7 +46,7 @@ JPanel breedRow = new JPanel(new FlowLayout());
 JLabel breedlabel = new JLabel("Horse Breed: ");
 breedRow.add(breedlabel);
 
-this.breedList = new JList();
+this.breedList = new JList<String>();
 this.breedList.setListData((String[])LISTOFBREEDS);
 breedRow.add(this.breedList);
 
@@ -57,7 +57,7 @@ JPanel colourRow = new JPanel(new FlowLayout());
 JLabel colourlabel = new JLabel("Coat Colour: ");
 colourRow.add(colourlabel);
 
-this.colourList = new JList();
+this.colourList = new JList<String>();
 this.colourList.setListData((String[])LISTOFCOLOURS);
 colourRow.add(this.colourList);
 
@@ -76,7 +76,7 @@ JPanel saddleRow = new JPanel(new FlowLayout());
 JLabel saddlelabel = new JLabel("Saddle Type: ");
 saddleRow.add(saddlelabel);
 
-this.saddleList = new JList();
+this.saddleList = new JList<String>();
 this.saddleList.setListData((String[])LISTOFSADDLES);
 saddleRow.add(this.saddleList);
 
@@ -86,7 +86,7 @@ JPanel horseshoeRow = new JPanel(new FlowLayout());
 JLabel horseshoelabel = new JLabel("HorseShoe Type: ");
 horseshoeRow.add(horseshoelabel);
 
-this.horseShoeList= new JList();
+this.horseShoeList= new JList<String>();
 this.horseShoeList.setListData((String[])LISTOFHORSESHOES);
 horseshoeRow.add(this.horseShoeList);
 
@@ -96,7 +96,7 @@ JPanel bridleRow = new JPanel(new FlowLayout());
 JLabel bridlelabel = new JLabel("HorseShoe Type: ");
 bridleRow.add(bridlelabel);
 
-this.bridleList= new JList();
+this.bridleList= new JList<String>();
 this.bridleList.setListData((String[])LISTOFBRIDLES);
 bridleRow.add(this.bridleList);
 

@@ -11,8 +11,8 @@ private final static String[] LISTOFCONDITIONS= {"none","muddy","icy"};
 private currentRaceInfo raceInfo;
 
 private JTextArea raceLengthBox;
-private JList shapeList;
-private JList conditionList;
+private JList<String> shapeList;
+private JList<String> conditionList;
 private JSlider laneCount;
 private JFrame frame;
 
@@ -56,7 +56,7 @@ public LaneSelection_gui(currentRaceInfo raceInfo)
     JLabel raceShapelabel = new JLabel("Track Shape: ");
     raceShapeRow.add(raceShapelabel);
 
-    this.shapeList = new JList();
+    this.shapeList = new JList<String>();
     this.shapeList.setListData((String[])LISTOFSHAPES);
     raceShapeRow.add(this.shapeList);
 
@@ -67,7 +67,7 @@ public LaneSelection_gui(currentRaceInfo raceInfo)
     raceConditionRow.add(raceConditionlabel);
 
 
-    this.conditionList = new JList();
+    this.conditionList = new JList<String>();
     this.conditionList.setListData((String[])LISTOFCONDITIONS);
     raceConditionRow.add(this.conditionList);
 
