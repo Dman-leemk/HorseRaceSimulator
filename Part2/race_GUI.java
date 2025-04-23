@@ -10,13 +10,16 @@ import javax.swing.*;
  */
 public class race_GUI
 {
-    private int delay = 1000;
+    private int delay = 300;
 
     private JTextArea gui;
     private boolean isRaceFinished;
 
     private ActionListener racePrint = new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
+        
+        String endString = "";
+
          //print the race positions
         gui.setText(raceInfo.getTrack().printRace(raceInfo.getHorses()));
 
@@ -36,7 +39,12 @@ public class race_GUI
         {
             if (horse != null)
             {
-                isRaceFinished = allHorsesFallen && horse.hasFallen();
+                if (horse.hasFallen())
+                {
+                    endString = endString + "\n" + horse.getName() + " fell!";
+                }
+                
+                isRaceFinished = allHorsesFallen & horse.hasFallen();
             }
         }
         
@@ -47,6 +55,7 @@ public class race_GUI
             {
                 if (raceWonBy(horse))
                 {
+                    endString = endString + "\n" + horse.getName() + " has won!"; 
                     isRaceFinished = true;
                 }
             }
@@ -54,6 +63,8 @@ public class race_GUI
 
         if (isRaceFinished)
         {
+            gui.setText(endString);
+            
             ((Timer)evt.getSource()).stop();
         }
         
@@ -171,7 +182,7 @@ public class race_GUI
      */
     private boolean raceWonBy(Horse theHorse)
     {
-        if (theHorse.getDistanceTravelled() >= raceInfo.getHorses().length)
+        if (theHorse.getDistanceTravelled() >= raceInfo.getTrack().getlength())
         {
             changeConfidence(theHorse,true);
             System.out.println("The winner is " + theHorse.getName());
