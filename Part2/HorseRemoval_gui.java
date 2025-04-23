@@ -11,7 +11,7 @@ boolean isNoHorse = true;
 for (Horse horse : raceInfo.getHorses()) {
     if (horse != null)
     {
-        isNoHorse = true;
+        isNoHorse = false;
     }    
 }
 
@@ -29,15 +29,25 @@ JPanel fullPanel = new JPanel(new GridLayout(raceInfo.getHorses().length,1));
 
 for (Horse horse : raceInfo.getHorses())
 {
-    JButton Btn = new JButton(horse.getName());
-    Btn.addActionListener(e -> raceInfo.removeHorse(horse));
-    fullPanel.add(Btn);
+    if (horse != null)
+    {
+        JButton Btn = new JButton(horse.getName());
+        Btn.addActionListener(e ->removeHorse(raceInfo,horse,frame) );
+        fullPanel.add(Btn);
+    }
 }
 
 // Add the panel to the frame
-fullPanel.add(fullPanel);
+frame.add(fullPanel);
 // Set the frame visible
-fullPanel.setVisible(true);
+frame.setVisible(true);
 
 }
+
+private void removeHorse (currentRaceInfo raceInfo, Horse horse,JFrame frame)
+{
+    raceInfo.removeHorse(horse);
+    frame.dispose();
+}
+
 }
