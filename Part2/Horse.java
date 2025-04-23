@@ -12,17 +12,29 @@ public class Horse
     private char horseSymbol;
     private int distanceTravelled;
     private boolean hasFallen;
-    private double horseConfidence;   
+    private double horseConfidence;
+    private String colour;
+    private int breed;
+    private int horseShoe;
+    private int saddle;
+    private int bridle;   
       
     //Constructor of class Horse
     /**
      * Constructor for objects of class Horse
      */
-    public Horse(char horseSymbol, String horseName, double horseConfidence)
+    public Horse(char horseSymbol, String horseName,
+     double horseConfidence, String colour, int breed, 
+     int horseShoe, int saddle, int bridle)
     {
         this.horseSymbol = horseSymbol;
         this.horseName = horseName;
         this.horseConfidence = horseConfidence;
+        this.colour = colour;
+        this.breed = breed;
+        this.horseShoe = horseShoe;
+        this.saddle = saddle;
+        this.bridle = bridle;
         this.hasFallen = false;
         this.distanceTravelled = 0;
     }
