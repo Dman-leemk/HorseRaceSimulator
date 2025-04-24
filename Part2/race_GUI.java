@@ -160,6 +160,10 @@ public class race_GUI
             //the probability that the horse will move forward depends on the confidence;
             if (Math.random() < theHorse.getConfidence())
             {
+                if (Math.random() < theHorse.getSpeed() * theHorse.getSpeed())
+                {
+                    theHorse.moveForward();
+                }
                theHorse.moveForward();
             }
             
@@ -168,8 +172,11 @@ public class race_GUI
             //so if you double the confidence, the probability that it will fall is *2
             if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
             {
-                theHorse.fall();
-                changeConfidence(theHorse,false);
+                if (Math.random() < theHorse.getEndurance())
+                {
+                    theHorse.fall();
+                    changeConfidence(theHorse,false);;
+                }
             }
         }
     }
