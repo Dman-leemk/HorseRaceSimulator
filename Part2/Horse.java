@@ -1,3 +1,17 @@
+class horseStatChangers
+{
+    final double confidenceModifer;
+    final double speedModifer;
+    final double enduranceModifer;
+
+    public horseStatChangers(double confidenceModifer, double speedModifer,double enduranceModifer) {
+        this.confidenceModifer = confidenceModifer;
+        this.speedModifer = speedModifer;
+        this.enduranceModifer = enduranceModifer;
+    }
+}
+
+
 
 /**
  * Stores the necessary information about the horse and provides the abity to edit the features of the horses
@@ -12,29 +26,64 @@ public class Horse
     private char horseSymbol;
     private int distanceTravelled;
     private boolean hasFallen;
-    private double horseConfidence;
     private String colour;
     private int breed;
     private int horseShoe;
     private int saddle;
     private int bridle;   
-      
+
+    static final double baseConfidence = 0.5;
+    static final double baseSpeed = 0.5;
+    static final double baseEndurance = 0.5;
+
+    private double horseConfidence;
+    private final double horseSpeed;
+    private final double horseEndurance;
+
+
+    static horseStatChangers[] breedEffects = {new horseStatChangers(0.1,0.2,0.1),new horseStatChangers(-0.1,0.4,-0.1)};
+    static horseStatChangers[] horseShoeEffects = {new horseStatChangers(0,0.3,-0.3),new horseStatChangers(0,-0.3,0.3),new horseStatChangers(0,0,0)};
+    static horseStatChangers[] saddleEffects = {new horseStatChangers(0.2,0,0),new horseStatChangers(0,0.2,0),new horseStatChangers (0,0,0)};
+    static horseStatChangers[] bridleEffects = {new horseStatChangers(0.1,0.2,0.1),new horseStatChangers(0.2,0.1,0.1),new horseStatChangers(0.1,0.1,0.2)};
+
     //Constructor of class Horse
     /**
      * Constructor for objects of class Horse
      */
     public Horse(char horseSymbol, String horseName,
-     double horseConfidence, String colour, int breed, 
-     int horseShoe, int saddle, int bridle)
+     String colour, int breed, int horseShoe, 
+     int saddle, int bridle)
     {
         this.horseSymbol = horseSymbol;
         this.horseName = horseName;
-        this.horseConfidence = horseConfidence;
         this.colour = colour;
         this.breed = breed;
         this.horseShoe = horseShoe;
         this.saddle = saddle;
         this.bridle = bridle;
+
+        this.horseConfidence = 
+        baseConfidence + 
+        breedEffects[breed].confidenceModifer + 
+        horseShoeEffects[horseShoe].confidenceModifer + 
+        saddleEffects[saddle].confidenceModifer + 
+        bridleEffects[bridle].confidenceModifer;
+
+        this.horseSpeed = 
+        baseSpeed + 
+        breedEffects[breed].speedModifer + 
+        horseShoeEffects[horseShoe].speedModifer + 
+        saddleEffects[saddle].speedModifer +
+        bridleEffects[bridle].speedModifer;
+
+        this.horseEndurance = 
+        baseEndurance + 
+        breedEffects[breed].enduranceModifer + 
+        horseShoeEffects[horseShoe].enduranceModifer + 
+        saddleEffects[saddle].enduranceModifer +
+        bridleEffects[bridle].enduranceModifer;
+
+
         this.hasFallen = false;
         this.distanceTravelled = 0;
     }
@@ -50,6 +99,16 @@ public class Horse
     public double getConfidence()
     {
        return this.horseConfidence; 
+    }
+
+    public double getSpeed()
+    {
+       return this.horseSpeed; 
+    }
+
+    public double getEndurance()
+    {
+       return this.horseEndurance; 
     }
     
     public int getDistanceTravelled()
