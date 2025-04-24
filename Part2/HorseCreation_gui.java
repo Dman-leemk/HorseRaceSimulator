@@ -93,7 +93,7 @@ horseshoeRow.add(this.horseShoeList);
 // Bridle row
 JPanel bridleRow = new JPanel(new FlowLayout());
 
-JLabel bridlelabel = new JLabel("HorseShoe Type: ");
+JLabel bridlelabel = new JLabel("Bridle Type: ");
 bridleRow.add(bridlelabel);
 
 this.bridleList= new JList<String>();
@@ -170,7 +170,6 @@ private void addNewHorse ()
     this.raceInfo.addHorse(
     new Horse(symbol,
     name, 
-    0.5,
     LISTOFCOLOURS[this.colourList.getSelectedIndex()],
     this.breedList.getSelectedIndex(),
     this.saddleList.getSelectedIndex(),
