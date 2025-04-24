@@ -24,8 +24,6 @@ public class Horse
     //Fields of class Horse
     private String horseName;
     private char horseSymbol;
-    private int distanceTravelled;
-    private boolean hasFallen;
     private String colour;
     private int breed;
     private int horseShoe;
@@ -39,12 +37,31 @@ public class Horse
     private double horseConfidence;
     private final double horseSpeed;
     private final double horseEndurance;
+    private int winCount;
+    private int lossCount;
+
+    private int distanceTravelled;
+    private int currentFinishPostion;
+    private int timeToFinish;
 
 
-    static horseStatChangers[] breedEffects = {new horseStatChangers(0.1,0.2,0.1),new horseStatChangers(-0.1,0.4,-0.1)};
-    static horseStatChangers[] horseShoeEffects = {new horseStatChangers(0,0.3,-0.3),new horseStatChangers(0,-0.3,0.3),new horseStatChangers(0,0,0)};
-    static horseStatChangers[] saddleEffects = {new horseStatChangers(0.2,0,0),new horseStatChangers(0,0.2,0),new horseStatChangers (0,0,0)};
-    static horseStatChangers[] bridleEffects = {new horseStatChangers(0.1,0.2,0.1),new horseStatChangers(0.2,0.1,0.1),new horseStatChangers(0.1,0.1,0.2)};
+    static horseStatChangers[] breedEffects = {
+        new horseStatChangers(0.1,0.2,0.1),
+        new horseStatChangers(-0.1,0.4,-0.1)};
+
+    static horseStatChangers[] horseShoeEffects = {
+        new horseStatChangers(0,0.3,-0.3),
+        new horseStatChangers(0,-0.3,0.3),
+        new horseStatChangers(0,0,0)};
+
+    static horseStatChangers[] saddleEffects = {
+        new horseStatChangers(0.2,0,0),
+        new horseStatChangers(0,0.2,0),
+        new horseStatChangers (0,0,0)};
+    static horseStatChangers[] bridleEffects = {
+        new horseStatChangers(0.1,0.2,0.1),
+        new horseStatChangers(0.2,0.1,0.1),
+        new horseStatChangers(0.1,0.1,0.2)};
 
     //Constructor of class Horse
     /**
@@ -63,37 +80,61 @@ public class Horse
         this.bridle = bridle;
 
         this.horseConfidence = 
-        baseConfidence + 
-        breedEffects[breed].confidenceModifer + 
-        horseShoeEffects[horseShoe].confidenceModifer + 
-        saddleEffects[saddle].confidenceModifer + 
-        bridleEffects[bridle].confidenceModifer;
+            baseConfidence + 
+            breedEffects[breed].confidenceModifer + 
+            horseShoeEffects[horseShoe].confidenceModifer + 
+            saddleEffects[saddle].confidenceModifer + 
+            bridleEffects[bridle].confidenceModifer;
 
         this.horseSpeed = 
-        baseSpeed + 
-        breedEffects[breed].speedModifer + 
-        horseShoeEffects[horseShoe].speedModifer + 
-        saddleEffects[saddle].speedModifer +
-        bridleEffects[bridle].speedModifer;
+            baseSpeed + 
+            breedEffects[breed].speedModifer + 
+            horseShoeEffects[horseShoe].speedModifer + 
+            saddleEffects[saddle].speedModifer +
+            bridleEffects[bridle].speedModifer;
 
         this.horseEndurance = 
-        baseEndurance + 
-        breedEffects[breed].enduranceModifer + 
-        horseShoeEffects[horseShoe].enduranceModifer + 
-        saddleEffects[saddle].enduranceModifer +
-        bridleEffects[bridle].enduranceModifer;
+            baseEndurance + 
+            breedEffects[breed].enduranceModifer + 
+            horseShoeEffects[horseShoe].enduranceModifer + 
+            saddleEffects[saddle].enduranceModifer +
+            bridleEffects[bridle].enduranceModifer;
 
 
-        this.hasFallen = false;
         this.distanceTravelled = 0;
+        this.currentFinishPostion = 0;
     }
     
-    
-    
-    //Other methods of class Horse
-    public void fall()
+    public void raceFinished (int currentFinishPostion,int timeToFinish)
     {
-        this.hasFallen = true;
+        this.timeToFinish = timeToFinish;
+        if (currentFinishPostion == 1)
+        {
+            this.winCount ++;
+        }
+        else
+        {
+            this.lossCount ++;
+        }
+        this.currentFinishPostion = currentFinishPostion;
+    }
+
+    public int getCurrentFinishPostion ()
+    {
+        return this.currentFinishPostion;
+    }
+
+    public boolean isFinished ()
+    {
+        return this.currentFinishPostion != 0;
+    }
+
+    //Other methods of class Horse
+    public void fall(int timeToFinish)
+    {
+        this.timeToFinish = timeToFinish;
+        this.lossCount ++;
+        this.currentFinishPostion = -1;
     }
     
     public double getConfidence()
@@ -128,18 +169,34 @@ public class Horse
     
     public void goBackToStart()
     {
-        this.hasFallen = false;
+        this.currentFinishPostion = 0;
         this.distanceTravelled = 0;
-    }
-    
-    public boolean hasFallen()
-    {
-        return this.hasFallen;
     }
 
     public void moveForward()
     {
         this.distanceTravelled ++;
+    }
+
+    public double getAverageSpeed ()
+    {
+        return ((double) this.distanceTravelled) / ((double) this.timeToFinish / 1000);
+    }
+
+    public String getWinRatio ()
+    {   if (this.lossCount == 0)
+        {
+            return "Undefeated";
+        }
+        else
+        {
+            return String.format("%.2f",(double) this.winCount / (double) this.lossCount);
+        }
+    }
+
+    public int getTimeTaken ()
+    {
+        return this.timeToFinish;
     }
 
     public void setConfidence(double newConfidence)

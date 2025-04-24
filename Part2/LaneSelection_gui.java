@@ -125,7 +125,12 @@ private void createNewRace ()
     }
 
     this.frame.dispose();
-    raceInfo.setRaceTrack(new track(this.laneCount.getValue(),length,  LISTOFSHAPES[this.shapeList.getSelectedIndex()], LISTOFCONDITIONS[this.conditionList.getSelectedIndex()]));
+    raceInfo.setRaceTrack(
+        new track(
+            this.laneCount.getValue(),
+            length, 
+            LISTOFSHAPES[this.shapeList.getSelectedIndex()],
+            this.conditionList.getSelectedIndex()));
 }
 
 }

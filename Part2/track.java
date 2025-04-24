@@ -1,3 +1,19 @@
+class trackEffect
+{
+    final String name;
+    final double speedModifer;
+    final double enduranceModifer;
+
+    public trackEffect(String name, double speedModifer, double enduranceModifer) 
+    {
+        this.name = name;
+        this.speedModifer = speedModifer;
+        this.enduranceModifer = enduranceModifer;
+    }
+}
+
+
+
 
 public class track 
 {
@@ -6,12 +22,23 @@ public class track
     private final String trackShape;
     private final String trackCondition;
 
-    public track (int laneCount,int length, String trackShape, String trackCondition)
+    private double trackSpeedEffect;
+    private double trackEnduranceEffect;
+
+    static final trackEffect[] TRACK_EFFECTS = {
+        new trackEffect("none",0,0), 
+        new trackEffect("muddy", -0.2, 0), 
+        new trackEffect("icy", 0, -0.2), 
+        new trackEffect("fresh", 0.1,0.1)};
+
+    public track (int laneCount,int length, String trackShape, int trackCondition)
     {
         this.laneCount = laneCount;
         this.length = length;
         this.trackShape = trackShape;
-        this.trackCondition = trackCondition;
+        this.trackCondition = TRACK_EFFECTS[trackCondition].name;
+        this.trackSpeedEffect = TRACK_EFFECTS[trackCondition].speedModifer;
+        this.trackEnduranceEffect= TRACK_EFFECTS[trackCondition].enduranceModifer;
     }
 
     public int getlaneCount () 
@@ -23,6 +50,17 @@ public class track
     {
         return this.length;
     }
+
+    public double getSpeedModifer ()
+    {
+        return this.trackSpeedEffect;
+    }
+
+    public double getEnduranceModifer ()
+    {
+        return this.trackEnduranceEffect;
+    }
+
 
     /***
      * Print the race on the terminal
@@ -88,7 +126,7 @@ public class track
         //else print the horse's symbol
         if (theHorse != null)
         {
-            if(theHorse.hasFallen())
+            if(theHorse.getCurrentFinishPostion() == -1)
             {
                 lane = lane + '\u2322';
             }
@@ -109,7 +147,7 @@ public class track
         lane = lane +  '|';
         if (theHorse != null)
         {
-            lane = lane + "     " + theHorse.getName() + " (Current confidence " + theHorse.getConfidence() + ")";
+            lane = lane + "     " + theHorse.getName() + " (Current confidence " + String.format("%.2f", theHorse.getConfidence()) + ")";
         }
         return lane;
     }

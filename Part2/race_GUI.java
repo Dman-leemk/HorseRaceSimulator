@@ -1,4 +1,6 @@
 import java.awt.event.*;
+import java.nio.file.FileAlreadyExistsException;
+import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
 
 /**
@@ -13,58 +15,60 @@ public class race_GUI
     private int delay = 300;
 
     private JTextArea gui;
-    private boolean isRaceFinished;
+
+    final static double confidenceModifer = 0.02;
+    private final currentRaceInfo raceInfo;
+    private int currentPostion;
+    private int numberOfTimerTicks;
 
     private ActionListener racePrint = new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
-        
-        String endString = "";
+        System.out.println(currentPostion);
+        numberOfTimerTicks ++;
 
-         //print the race positions
+        //print the race positions
         gui.setText(raceInfo.getTrack().printRace(raceInfo.getHorses()));
 
         //move each horse
         for (Horse horse : raceInfo.getHorses())
         {
-            if (horse != null)
+            if (horse != null && !horse.isFinished())
             {
-                moveHorse(horse);
+                moveHorse(horse,raceInfo.getTrack(),numberOfTimerTicks * delay);
             }
         }
         
-        //If all horses have fallen end the race
-        boolean allHorsesFallen = true;
-
+        int numberOfCompletedHorses = 0;
         for (Horse horse : raceInfo.getHorses())
         {
-            if (horse != null)
+            if (horse != null && !horse.isFinished())
             {
-                if (horse.hasFallen())
+                if (horse.getDistanceTravelled() >= raceInfo.getTrack().getlength())
                 {
-                    endString = endString + "\n" + horse.getName() + " fell!";
-                }
-                
-                isRaceFinished = allHorsesFallen & horse.hasFallen();
-            }
-        }
-        
-        //if any of the three horses has won the race is finished
-        for (Horse horse : raceInfo.getHorses())
-        {
-            if (horse != null)
-            {
-                if (raceWonBy(horse))
-                {
-                    endString = endString + "\n" + horse.getName() + " has won!"; 
-                    isRaceFinished = true;
+                    horse.raceFinished(currentPostion,numberOfTimerTicks * delay);
+                    numberOfCompletedHorses ++;
                 }
             }
         }
 
-        if (isRaceFinished)
+        currentPostion += numberOfCompletedHorses;         
+
+
+        boolean isFinished = true;
+        for (Horse horse : raceInfo.getHorses())
         {
-            gui.setText(endString);
-            
+            if (horse != null)
+            {   
+                if (!horse.isFinished())
+                {
+                    isFinished = false;
+                }
+            } 
+        }
+
+        if (isFinished)
+        {
+            printEndStats();
             ((Timer)evt.getSource()).stop();
         }
         
@@ -72,12 +76,10 @@ public class race_GUI
     };
 
 
-
-    final static double confidenceModifer = 0.02;
-    private final currentRaceInfo raceInfo;
-    
     public race_GUI (currentRaceInfo raceInfo)
     {
+        currentPostion = 1;
+        this.numberOfTimerTicks = 0;
         this.raceInfo = raceInfo;
         startRace();
     }
@@ -121,9 +123,6 @@ public class race_GUI
             return;
         }
 
-        //declare a local variable to tell us when the race is finished
-        this.isRaceFinished = false;
-
         //reset all the lanes (all horses not fallen and back to 0). 
         for (Horse horse : raceInfo.getHorses())
         {
@@ -132,6 +131,8 @@ public class race_GUI
                 horse.goBackToStart();
             }
         }
+
+
         JFrame frame = new JFrame("Race");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 350);
@@ -151,53 +152,76 @@ public class race_GUI
      * 
      * @param theHorse the horse to be moved
      */
-    private void moveHorse(Horse theHorse)
+    private void moveHorse(Horse theHorse,track currentTracks,int timePassed)
     {
-        //if the horse has fallen it cannot move, 
-        //so only run if it has not fallen
-        if  (!theHorse.hasFallen())
+        //the probability that the horse will move forward depends on the confidence;
+        if (Math.random() < theHorse.getConfidence())
         {
-            //the probability that the horse will move forward depends on the confidence;
-            if (Math.random() < theHorse.getConfidence())
+            if (Math.random() < (theHorse.getSpeed()-currentTracks.getSpeedModifer()) * theHorse.getSpeed())
             {
-                if (Math.random() < theHorse.getSpeed() * theHorse.getSpeed())
-                {
-                    theHorse.moveForward();
-                }
-               theHorse.moveForward();
+                theHorse.moveForward();
             }
-            
-            //the probability that the horse will fall is very small (max is 0.1)
-            //but will also will depends exponentially on confidence 
-            //so if you double the confidence, the probability that it will fall is *2
-            if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
+            theHorse.moveForward();
+        }
+        
+        //the probability that the horse will fall is very small (max is 0.1)
+        //but will also will depends exponentially on confidence 
+        //so if you double the confidence, the probability that it will fall is *2
+        if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
+        {
+            if (Math.random() < theHorse.getEndurance()- currentTracks.getEnduranceModifer())
             {
-                if (Math.random() < theHorse.getEndurance())
-                {
-                    theHorse.fall();
-                    changeConfidence(theHorse,false);;
-                }
+                theHorse.fall(timePassed);
+                changeConfidence(theHorse,false);;
             }
         }
     }
         
     /** 
-     * Determines if a horse has won the race
+     * Prints the final match stats
      *
-     * @param theHorse The horse we are testing
-     * @return true if the horse has won, false otherwise.
      */
-    private boolean raceWonBy(Horse theHorse)
+
+    private void printEndStats ()
     {
-        if (theHorse.getDistanceTravelled() >= raceInfo.getTrack().getlength())
+        String printedMessage = "";
+ 
+        for (Horse horse : raceInfo.getHorses())
         {
-            changeConfidence(theHorse,true);
-            System.out.println("The winner is " + theHorse.getName());
-            return true;
+            if (horse != null)
+            {
+                String racePostion;
+                String confidenceChange;
+
+                if (horse.getCurrentFinishPostion() == -1)
+                {
+                    racePostion = "Fell";
+                    confidenceChange = "-" + confidenceModifer; 
+                }
+                else if (horse.getCurrentFinishPostion() == 1)
+                {
+                    racePostion = "Won";
+                    confidenceChange = "+" + confidenceModifer;
+                }
+                else
+                {
+                    racePostion = "" + horse.getCurrentFinishPostion() ;
+                    confidenceChange = "No change";
+                }
+
+                printedMessage = 
+                     printedMessage  +
+                    "   Name: " + horse.getName() + 
+                    "   Postion: " + racePostion +
+                    "   Win loss ratio: " + horse.getWinRatio() + 
+                    "   Average speed: " + String.format("%.2f",horse.getAverageSpeed()) + 
+                    "   Time: " + horse.getTimeTaken() +
+                    "   Confidence: " + confidenceChange + '\n';
+            }
+
         }
-        else
-        {
-            return false;
-        }
+
+        gui.setText(printedMessage);
     }
+
 }
