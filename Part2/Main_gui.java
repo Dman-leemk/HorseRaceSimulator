@@ -26,6 +26,7 @@ horseBtn.addActionListener(e -> new HorseMain_gui(raceInfo));
 
 // creates the Stats button
 JButton statsBtn = new JButton("View Stats");
+statsBtn.addActionListener(e -> new StatSelection_gui(raceInfo));
 
 // creates the Betting button
 JButton betBtn = new JButton("Betting");

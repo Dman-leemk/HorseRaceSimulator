@@ -3,12 +3,16 @@ class trackEffect
     final String name;
     final double speedModifer;
     final double enduranceModifer;
+    final double confidenceModifer;
+    final String effectInWords;
 
-    public trackEffect(String name, double speedModifer, double enduranceModifer) 
+    public trackEffect(String name, double speedModifer, double enduranceModifer,double confidenceModifer,String effectInWords) 
     {
         this.name = name;
         this.speedModifer = speedModifer;
         this.enduranceModifer = enduranceModifer;
+        this.confidenceModifer = confidenceModifer;
+        this.effectInWords = effectInWords;
     }
 }
 
@@ -20,27 +24,56 @@ public class track
     private final int laneCount;
     private final int length;
     private final String trackShape;
-    private final String trackCondition;
+    private final int trackCondition;
+    private int bestTime;
 
     private double trackSpeedEffect;
     private double trackEnduranceEffect;
+    private double trackConfidenceEffect;
 
     static final trackEffect[] TRACK_EFFECTS = {
-        new trackEffect("none",0,0), 
-        new trackEffect("muddy", -0.2, 0), 
-        new trackEffect("icy", 0, -0.2), 
-        new trackEffect("fresh", 0.1,0.1)};
+        new trackEffect("none",0,0,0," no effects"), 
+        new trackEffect("muddy", 0, -0.2, -0.1, " reduces endurance and confidence"), 
+        new trackEffect("icy", -0.2, 0, -0.1, "reduces speed and confidence"), 
+        new trackEffect("fresh", 0.1,0.1,0.1, "increases speed, endurance and confidence")};
 
     public track (int laneCount,int length, String trackShape, int trackCondition)
     {
         this.laneCount = laneCount;
         this.length = length;
         this.trackShape = trackShape;
-        this.trackCondition = TRACK_EFFECTS[trackCondition].name;
-        this.trackSpeedEffect = TRACK_EFFECTS[trackCondition].speedModifer;
-        this.trackEnduranceEffect= TRACK_EFFECTS[trackCondition].enduranceModifer;
+        this.bestTime = -1;
+        this.trackCondition       = trackCondition;
+        this.trackSpeedEffect     = TRACK_EFFECTS[trackCondition].speedModifer;
+        this.trackEnduranceEffect = TRACK_EFFECTS[trackCondition].enduranceModifer;
+        this.trackConfidenceEffect = TRACK_EFFECTS[trackCondition].confidenceModifer;
     }
 
+    public void setBestTime (int bestTime)
+    {
+        if (this.bestTime > bestTime || this.bestTime == -1) 
+        {
+            this.bestTime = bestTime;            
+        }
+    }
+
+    private String returnBestTime ()
+    {
+        if (this.bestTime == -1) 
+        {
+            return "No best time";
+        }
+        else
+        {
+            return "Best time = " + this.bestTime + " ms";
+        }
+    } 
+
+    private String returnConditonEffect ()
+    {
+        return TRACK_EFFECTS[trackCondition].name + " " + TRACK_EFFECTS[trackCondition].effectInWords;
+    }
+    
     public int getlaneCount () 
     {
         return this.laneCount;
@@ -61,7 +94,10 @@ public class track
         return this.trackEnduranceEffect;
     }
 
-
+    public double getConfidenceModifer ()
+    {
+        return this.trackConfidenceEffect;
+    }
     /***
      * Print the race on the terminal
      */
@@ -76,7 +112,7 @@ public class track
     
     public String printStraightRace(Horse[] horses)
     {
-        String race = "";
+        String race = "Best time is: " + returnBestTime() + " the condition is " + returnConditonEffect() + "\n";
         
         race = race + multipleChars('=',this.length); //top edge of track
         race = race + '\n';

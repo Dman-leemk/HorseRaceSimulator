@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 class horseStatChangers
 {
     final double confidenceModifer;
@@ -44,6 +46,7 @@ public class Horse
     private int currentFinishPostion;
     private int timeToFinish;
 
+    private ArrayList <Horse_stats> stats = new ArrayList<>();
 
     static horseStatChangers[] breedEffects = {
         new horseStatChangers(0.1,0.2,0.1),
@@ -105,7 +108,7 @@ public class Horse
         this.currentFinishPostion = 0;
     }
     
-    public void raceFinished (int currentFinishPostion,int timeToFinish)
+    public void raceFinished (int currentFinishPostion,int timeToFinish, track track)
     {
         this.timeToFinish = timeToFinish;
         if (currentFinishPostion == 1)
@@ -116,7 +119,9 @@ public class Horse
         {
             this.lossCount ++;
         }
+        track.setBestTime(timeToFinish);
         this.currentFinishPostion = currentFinishPostion;
+        this.stats.add(new Horse_stats(track,currentFinishPostion,getAverageSpeed(),this.timeToFinish));
     }
 
     public int getCurrentFinishPostion ()
@@ -130,11 +135,12 @@ public class Horse
     }
 
     //Other methods of class Horse
-    public void fall(int timeToFinish)
+    public void fall(int timeToFinish,track track)
     {
         this.timeToFinish = timeToFinish;
         this.lossCount ++;
         this.currentFinishPostion = -1;
+        this.stats.add(new Horse_stats(track,currentFinishPostion,getAverageSpeed(),this.timeToFinish));
     }
     
     public double getConfidence()
@@ -214,6 +220,11 @@ public class Horse
     public void setSymbol(char newSymbol)
     {
         this.horseSymbol = newSymbol;
+    }
+
+    public ArrayList <Horse_stats> getStats ()
+    {
+        return this.stats;
     }
     
 }

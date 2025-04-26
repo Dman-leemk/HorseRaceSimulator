@@ -1,7 +1,7 @@
 import java.awt.event.*;
-import java.nio.file.FileAlreadyExistsException;
-import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
+import java.awt.*;
+
 
 /**
  * A three-horse race, each horse running in its own lane
@@ -16,14 +16,14 @@ public class race_GUI
 
     private JTextArea gui;
 
-    final static double confidenceModifer = 0.02;
+    final static double CONFIDENCEMODIFER = 0.02;
     private final currentRaceInfo raceInfo;
     private int currentPostion;
     private int numberOfTimerTicks;
 
-    private ActionListener racePrint = new ActionListener() {
+    private final ActionListener racePrint = new ActionListener() {
+    @Override
     public void actionPerformed(ActionEvent evt) {
-        System.out.println(currentPostion);
         numberOfTimerTicks ++;
 
         //print the race positions
@@ -45,7 +45,7 @@ public class race_GUI
             {
                 if (horse.getDistanceTravelled() >= raceInfo.getTrack().getlength())
                 {
-                    horse.raceFinished(currentPostion,numberOfTimerTicks * delay);
+                    horse.raceFinished(currentPostion,numberOfTimerTicks * delay, raceInfo.getTrack());
                     numberOfCompletedHorses ++;
                 }
             }
@@ -99,11 +99,11 @@ public class race_GUI
         
         if (isIncrease) 
         {
-            theHorse.setConfidence(currentConfidence + confidenceModifer);    
+            theHorse.setConfidence(currentConfidence + CONFIDENCEMODIFER);    
         }
         else
         {
-            theHorse.setConfidence(currentConfidence - confidenceModifer);   
+            theHorse.setConfidence(currentConfidence - CONFIDENCEMODIFER);   
         }
          
     }
@@ -171,7 +171,7 @@ public class race_GUI
         {
             if (Math.random() < theHorse.getEndurance()- currentTracks.getEnduranceModifer())
             {
-                theHorse.fall(timePassed);
+                theHorse.fall(timePassed, raceInfo.getTrack());
                 changeConfidence(theHorse,false);;
             }
         }
@@ -196,12 +196,12 @@ public class race_GUI
                 if (horse.getCurrentFinishPostion() == -1)
                 {
                     racePostion = "Fell";
-                    confidenceChange = "-" + confidenceModifer; 
+                    confidenceChange = "-" + CONFIDENCEMODIFER; 
                 }
                 else if (horse.getCurrentFinishPostion() == 1)
                 {
                     racePostion = "Won";
-                    confidenceChange = "+" + confidenceModifer;
+                    confidenceChange = "+" + CONFIDENCEMODIFER;
                 }
                 else
                 {
