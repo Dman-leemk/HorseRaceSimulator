@@ -8,7 +8,8 @@ public class Main
 {
     public static void main (String[] args)
     {
-        CurrentRaceInfo raceInfo = new CurrentRaceInfo ();
+        final int bettingCurrency = 1000;
+        CurrentRaceInfo raceInfo = new CurrentRaceInfo (bettingCurrency);
         new Main_gui(raceInfo);
     }
 }

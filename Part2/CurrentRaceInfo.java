@@ -8,6 +8,7 @@
 
 public class CurrentRaceInfo
 {
+    private int bettingCurrency;
     private Horse[] horses = null;
     private Track currentTrack;
 
@@ -21,6 +22,28 @@ public class CurrentRaceInfo
     {
         return currentTrack;
     }
+
+    public int getCurrency ()
+    {
+        return this.bettingCurrency;
+    }
+
+    public void addCurrency (int number)
+    {
+        this.bettingCurrency += number;
+    }
+
+    public void subCurrency (int number)
+    {
+        this.bettingCurrency -= number;
+    }
+    
+    public CurrentRaceInfo(int bettingCurrency) 
+    {
+        this.bettingCurrency = bettingCurrency;
+    }
+
+    
 
     /***
      * sets the track, the number of lanes is used to determine how many horses can be stored 
