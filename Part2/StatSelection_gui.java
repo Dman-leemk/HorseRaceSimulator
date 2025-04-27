@@ -11,6 +11,12 @@ public class StatSelection_gui
 
     public StatSelection_gui (CurrentRaceInfo raceInfo)
     {
+        // Ensures that there is a track
+        if (raceInfo.getHorses() == null)
+        {
+            new ErrorBox("Create a track first");
+            return;
+        }
 
         JFrame frame = new JFrame("Horse panel");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
