@@ -34,6 +34,7 @@ public class Main_gui {
 
         // Creates the Betting button
         JButton betBtn = new JButton("Betting");
+        betBtn.addActionListener(e -> new BettingScreen_gui(raceInfo));
 
         // Lays out the button section
         JPanel buttonList = new JPanel(new GridLayout(2, 2)); 

@@ -217,7 +217,8 @@ public class Horse
     }
 
     public String getWinRatio ()
-    {   if (this.lossCount == 0)
+    {   
+        if (this.lossCount == 0)
         {
             return "Undefeated";
         }
@@ -225,6 +226,16 @@ public class Horse
         {
             return String.format("%.2f",(double) this.winCount / (double) (this.lossCount + this.winCount));
         }
+    }
+
+    public double getWinRatioStat ()
+    {
+        if ((this.lossCount + this.winCount) == 0)
+        {
+            return 0;
+        }
+
+        return (double) this.winCount / (double) (this.lossCount + this.winCount);
     }
 
     public int getTimeTaken ()

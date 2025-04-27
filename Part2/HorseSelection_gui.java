@@ -11,7 +11,7 @@ public abstract class HorseSelection_gui {
 
     public HorseSelection_gui (CurrentRaceInfo raceInfo, String tabName)
     {
-        // checks is any horses are stores
+        // checks if any horses are stored
         boolean isNoHorse = true;
         for (Horse horse : raceInfo.getHorses()) {
             if (horse != null)
@@ -26,7 +26,7 @@ public abstract class HorseSelection_gui {
             return;
         }
 
-        // Sreates the gui
+        // Creates the gui
         JFrame frame = new JFrame(tabName);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(300, 500);
