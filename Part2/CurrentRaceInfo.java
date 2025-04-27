@@ -44,7 +44,7 @@ public class CurrentRaceInfo
         this.bettingCurrency = bettingCurrency;
     }
 
-    public void addBet (BetInfo[] bets)
+    public void setBets (BetInfo[] bets)
     {
         this.betsPlaced = bets;
     }
