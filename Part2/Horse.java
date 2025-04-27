@@ -223,7 +223,7 @@ public class Horse
         }
         else
         {
-            return String.format("%.2f",(double) this.winCount / (double) this.lossCount);
+            return String.format("%.2f",(double) this.winCount / (double) (this.lossCount + this.winCount));
         }
     }
 
