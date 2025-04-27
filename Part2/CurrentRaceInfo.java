@@ -11,6 +11,7 @@ public class CurrentRaceInfo
     private int bettingCurrency;
     private Horse[] horses = null;
     private Track currentTrack;
+    private BetInfo[] betsPlaced;
 
     // accessor methods
     public Horse[] getHorses ()
@@ -43,7 +44,15 @@ public class CurrentRaceInfo
         this.bettingCurrency = bettingCurrency;
     }
 
-    
+    public void addBet (BetInfo[] bets)
+    {
+        this.betsPlaced = bets;
+    }
+
+    public BetInfo[] getBets ()
+    {
+        return this.betsPlaced;
+    }
 
     /***
      * sets the track, the number of lanes is used to determine how many horses can be stored 
