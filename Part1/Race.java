@@ -60,6 +60,31 @@ public class Race
          
     }
 
+    /**
+     * Removes a horse from the lane
+     * 
+     * @param laneNumber the lane that the horse will be removed from
+     */
+    public void deleteHorse (int laneNumber)
+    {
+        if (laneNumber == 1)
+        {
+            lane1Horse = null;
+        }
+        else if (laneNumber == 2)
+        {
+            lane2Horse = null;
+        }
+        else if (laneNumber == 3)
+        {
+            lane3Horse = null;
+        }
+        else
+        {
+            System.out.println("No such lane");
+        }
+    }
+
 
     /**
      * Adds a horse to the race in a given lane
