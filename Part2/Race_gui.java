@@ -74,6 +74,20 @@ public class Race_gui
         // Ends the race
         if (isFinished)
         {
+            // Calculates the bet winnings
+            if (raceInfo.getBets() != null)
+            {
+                for (BetInfo bet: raceInfo.getBets()) 
+                {
+                    if (bet.getHorse().getCurrentFinishPostion() == 1)
+                    {
+                        raceInfo.addCurrency((int) bet.getWinnings());
+                        new ErrorBox("You won £" + (int) bet.getWinnings());
+                    }
+                }
+                raceInfo.setBets(null);
+            }
+            
             printEndStats();
             ((Timer)evt.getSource()).stop();
         }
@@ -87,6 +101,7 @@ public class Race_gui
         currentPostion = 1;
         this.numberOfTimerTicks = 0;
         this.raceInfo = raceInfo;
+        
         startRace();
     }
 
