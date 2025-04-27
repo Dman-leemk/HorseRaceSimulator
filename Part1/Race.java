@@ -71,15 +71,36 @@ public class Race
     {
         if (laneNumber == 1)
         {
-            lane1Horse = theHorse;
+            if (lane1Horse == null)
+            {
+                lane1Horse = theHorse;
+            }
+            else
+            {
+                System.out.println("Cannot add horse to lane " + laneNumber + " as it is already filled");
+            }
         }
         else if (laneNumber == 2)
         {
-            lane2Horse = theHorse;
+            if (lane2Horse == null)
+            {
+                lane2Horse = theHorse;
+            }
+            else
+            {
+                System.out.println("Cannot add horse to lane " + laneNumber + " as it is already filled");
+            }
         }
         else if (laneNumber == 3)
         {
-            lane3Horse = theHorse;
+            if (lane3Horse == null)
+            {
+                lane3Horse = theHorse;
+            }
+            else
+            {
+                System.out.println("Cannot add horse to lane " + laneNumber + " as it is already filled");
+            }
         }
         else
         {
