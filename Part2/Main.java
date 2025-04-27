@@ -6,7 +6,7 @@
 
 public class Main 
 {
-    public static void main (String[] args)
+    public static void startRaceGUI ()
     {
         final int bettingCurrency = 1000;
         CurrentRaceInfo raceInfo = new CurrentRaceInfo (bettingCurrency);
