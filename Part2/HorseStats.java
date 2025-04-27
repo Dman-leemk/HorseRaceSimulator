@@ -1,12 +1,17 @@
 
-public class Horse_stats
+/**
+ * Stores the infomation about completed races
+ * 
+ */
+
+public class HorseStats
 {
-    private final track raceTrack;
+    private final Track raceTrack;
     private final int positionFinished;
     private final double speed;
     private final int time;
-
-    public Horse_stats(track raceTrack, int positionFinished, double speed,int time) 
+    
+    public HorseStats(Track raceTrack, int positionFinished, double speed,int time) 
     {
         this.raceTrack = raceTrack;
         this.positionFinished = positionFinished;
@@ -14,7 +19,7 @@ public class Horse_stats
         this.time = time;
     }
 
-    public track getRaceTrack ()
+    public Track getRaceTrack ()
     {
         return this.raceTrack;
     }

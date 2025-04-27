@@ -1,3 +1,8 @@
+/**
+ * A class used to organise the various effects that could be provided to the horse
+ * due to the track and a way to describe the effects in words
+ * 
+ */
 class trackEffect
 {
     final String name;
@@ -16,10 +21,13 @@ class trackEffect
     }
 }
 
+/**
+ * Handles storing the information tied to the track
+ * handles the printing of the track
+ */
 
 
-
-public class track 
+public class Track 
 {
     private final int laneCount;
     private final int length;
@@ -27,9 +35,9 @@ public class track
     private final int trackCondition;
     private int bestTime;
 
-    private double trackSpeedEffect;
-    private double trackEnduranceEffect;
-    private double trackConfidenceEffect;
+    private final double trackSpeedEffect;
+    private final double trackEnduranceEffect;
+    private final double trackConfidenceEffect;
 
     static final trackEffect[] TRACK_EFFECTS = {
         new trackEffect("none",0,0,0," no effects"), 
@@ -37,7 +45,7 @@ public class track
         new trackEffect("icy", -0.2, 0, -0.1, "reduces speed and confidence"), 
         new trackEffect("fresh", 0.1,0.1,0.1, "increases speed, endurance and confidence")};
 
-    public track (int laneCount,int length, String trackShape, int trackCondition)
+    public Track (int laneCount,int length, String trackShape, int trackCondition)
     {
         this.laneCount = laneCount;
         this.length = length;
@@ -49,6 +57,7 @@ public class track
         this.trackConfidenceEffect = TRACK_EFFECTS[trackCondition].confidenceModifer;
     }
 
+    // Accessor methods
     public void setBestTime (int bestTime)
     {
         if (this.bestTime > bestTime || this.bestTime == -1) 
@@ -110,6 +119,8 @@ public class track
         return "error not implemented";
     }
     
+
+    // Prints the information required for a straight track 
     public String printStraightRace(Horse[] horses)
     {
         String race = "Best time is: " + returnBestTime() + " the condition is " + returnConditonEffect() + "\n";

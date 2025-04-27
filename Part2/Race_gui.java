@@ -7,29 +7,34 @@ import java.awt.*;
  * A three-horse race, each horse running in its own lane
  * for a given distance
  * 
- * @author McRaceface
+ * @author McRaceface, Damian  
  * @version 2
  */
-public class race_GUI
+public class Race_gui
 {
     private int delay = 300;
 
     private JTextArea gui;
 
     final static double CONFIDENCEMODIFER = 0.02;
-    private final currentRaceInfo raceInfo;
+    private final CurrentRaceInfo raceInfo;
     private int currentPostion;
     private int numberOfTimerTicks;
 
+    /**
+     *  Handles running the race, called via a timer  
+     *  Moves the horse and calculates if the race is finished
+     * 
+    */
     private final ActionListener racePrint = new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent evt) {
         numberOfTimerTicks ++;
 
-        //print the race positions
+        // Print the race positions
         gui.setText(raceInfo.getTrack().printRace(raceInfo.getHorses()));
 
-        //move each horse
+        // Move each horse that hasn't finished
         for (Horse horse : raceInfo.getHorses())
         {
             if (horse != null && !horse.isFinished())
@@ -37,7 +42,8 @@ public class race_GUI
                 moveHorse(horse,raceInfo.getTrack(),numberOfTimerTicks * delay);
             }
         }
-        
+
+        //Checks if any horses have completed the race, if they have assigns the the correct finish postion
         int numberOfCompletedHorses = 0;
         for (Horse horse : raceInfo.getHorses())
         {
@@ -50,10 +56,9 @@ public class race_GUI
                 }
             }
         }
-
         currentPostion += numberOfCompletedHorses;         
 
-
+        // Checks all horses have finished and ends the race if needed
         boolean isFinished = true;
         for (Horse horse : raceInfo.getHorses())
         {
@@ -66,6 +71,7 @@ public class race_GUI
             } 
         }
 
+        // Ends the race
         if (isFinished)
         {
             printEndStats();
@@ -75,8 +81,8 @@ public class race_GUI
     }
     };
 
-
-    public race_GUI (currentRaceInfo raceInfo)
+    // Constuctor
+    public Race_gui (CurrentRaceInfo raceInfo)
     {
         currentPostion = 1;
         this.numberOfTimerTicks = 0;
@@ -119,7 +125,7 @@ public class race_GUI
     {
         if (raceInfo.getTrack() == null)
         {
-            new errorBox("Create a race first");
+            new ErrorBox("Create a race first");
             return;
         }
 
@@ -152,10 +158,10 @@ public class race_GUI
      * 
      * @param theHorse the horse to be moved
      */
-    private void moveHorse(Horse theHorse,track currentTracks,int timePassed)
+    private void moveHorse(Horse theHorse,Track currentTracks,int timePassed)
     {
         //the probability that the horse will move forward depends on the confidence;
-        if (Math.random() < theHorse.getConfidence())
+        if (Math.random() < (theHorse.getConfidence() + currentTracks.getConfidenceModifer()) )
         {
             if (Math.random() < (theHorse.getSpeed()-currentTracks.getSpeedModifer()) * theHorse.getSpeed())
             {
@@ -172,7 +178,7 @@ public class race_GUI
             if (Math.random() < theHorse.getEndurance()- currentTracks.getEnduranceModifer())
             {
                 theHorse.fall(timePassed, raceInfo.getTrack());
-                changeConfidence(theHorse,false);;
+                changeConfidence(theHorse,false);
             }
         }
     }

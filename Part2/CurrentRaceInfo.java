@@ -1,27 +1,52 @@
-public class currentRaceInfo
+
+/**
+ * A class used to store all the required information about the current race
+ * Allows for adding and removing horses from the race
+ * 
+ */
+
+
+public class CurrentRaceInfo
 {
     private Horse[] horses = null;
-    private track currentTrack;
+    private Track currentTrack;
 
+    // accessor methods
     public Horse[] getHorses ()
     {
         return horses;
     }
 
-    public track getTrack ()
+    public Track getTrack ()
     {
         return currentTrack;
     }
 
     /***
-     * sets the race length
+     * sets the track, the number of lanes is used to determine how many horses can be stored 
      * 
-     * @param raceLength
+     * @param newTrack the lane object to store
      */
-    public void setRaceTrack (track newTrack)
+    public void setRaceTrack (Track newTrack)
     {
         this.currentTrack = newTrack;
-        this.horses = new Horse[newTrack.getlaneCount()];
+
+        // Stores horses from the previous track
+        Horse[] newLanes = new Horse[newTrack.getlaneCount()];
+        int startValue = 0;
+
+        if (this.horses != null)
+        {
+            for (Horse horse : this.horses)
+            {
+                if (horse != null && startValue < newLanes.length)
+                {
+                    newLanes[startValue] = horse;
+                }
+            }
+        }
+        
+        this.horses = newLanes;
     }
 
     /**
@@ -39,7 +64,7 @@ public class currentRaceInfo
                 return true;
             }
         }
-        new errorBox("Add more lanes or remove a horse");
+        new ErrorBox("Add more lanes or remove a horse");
 
         return false;
     }

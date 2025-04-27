@@ -1,55 +1,56 @@
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * Creates the starting gui
+ * It allows the user to select various functions like
+ * adding a track, adding a horse, viewing the horse stats 
+ * and starting the race
+ */
 
 public class Main_gui {
+    
+    public Main_gui (CurrentRaceInfo raceInfo) 
+    {
+        JFrame frame = new JFrame("Horse Simulator");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 350);
 
-private  currentRaceInfo raceInfo;
+        // Creates the start Race button
+        JButton startBtn = new JButton("Start race");
+        startBtn.addActionListener(e -> new Race_gui(raceInfo));
 
-public Main_gui (currentRaceInfo raceInfo) {
-// Create a JFrame
-JFrame frame = new JFrame("Horse Simulator");
-frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-frame.setSize(500, 350);
+        // Creates the Track button
+        JButton trackBtn = new JButton("Customise Track");
+        trackBtn.addActionListener(e -> new LaneSelection_gui(raceInfo));
 
-// creates the start Race button
-JButton startBtn = new JButton("Start race");
-startBtn.addActionListener(e -> new race_GUI(raceInfo));
+        // Creates the Horse button
+        JButton horseBtn = new JButton("Customise Horses");
+        horseBtn.addActionListener(e -> new HorseMain_gui(raceInfo));
 
-// creates the Track button
-JButton trackBtn = new JButton("Customise Track");
-trackBtn.addActionListener(e -> new LaneSelection_gui(raceInfo));
+        // Creates the Stats button
+        JButton statsBtn = new JButton("View Stats");
+        statsBtn.addActionListener(e -> new StatSelection_gui(raceInfo));
 
-// creates the Horse button
-JButton horseBtn = new JButton("Customise Horses");
-horseBtn.addActionListener(e -> new HorseMain_gui(raceInfo));
+        // Creates the Betting button
+        JButton betBtn = new JButton("Betting");
 
-// creates the Stats button
-JButton statsBtn = new JButton("View Stats");
-statsBtn.addActionListener(e -> new StatSelection_gui(raceInfo));
+        // Lays out the button section
+        JPanel buttonList = new JPanel(new GridLayout(2, 2)); 
 
-// creates the Betting button
-JButton betBtn = new JButton("Betting");
-
-// Lays out the button section
-JPanel buttonList = new JPanel(new GridLayout(2, 2)); 
-
-buttonList.add(trackBtn);
-buttonList.add(horseBtn);
-buttonList.add(statsBtn);
-buttonList.add(betBtn);
+        buttonList.add(trackBtn);
+        buttonList.add(horseBtn);
+        buttonList.add(statsBtn);
+        buttonList.add(betBtn);
 
 
-// Layouts out the various sections
-// Create a JPanel with GridLayout
-JPanel fullPanel = new JPanel(new GridLayout(2,1));
-fullPanel.add(buttonList);
-fullPanel.add(startBtn);
+        // Layouts out the various sections
+        JPanel fullPanel = new JPanel(new GridLayout(2,1));
+        fullPanel.add(buttonList);
+        fullPanel.add(startBtn);
 
-// Add the panel to the frame
-frame.add(fullPanel);
-// Set the frame visible
-frame.setVisible(true);
+        frame.add(fullPanel);
+        frame.setVisible(true);
 
-}
+    }
 }

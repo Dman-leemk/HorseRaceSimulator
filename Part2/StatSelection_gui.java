@@ -1,32 +1,36 @@
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * Creates a gui to allow the user to chose between comparing and viewing a single horses stats
+ * 
+ */
 
-public class StatSelection_gui {
-
-public StatSelection_gui (currentRaceInfo raceInfo)
+public class StatSelection_gui 
 {
 
-JFrame frame = new JFrame("Horse panel");
-frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-frame.setSize(500, 300);
+    public StatSelection_gui (CurrentRaceInfo raceInfo)
+    {
 
-JPanel fullPanel = new JPanel(new GridLayout(1,3));
+        JFrame frame = new JFrame("Horse panel");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(500, 300);
 
-// Track records btn
-JButton trackRecordBtn = new JButton("View horse stats");
-trackRecordBtn.addActionListener(e -> new viewHorsePerformances_gui(raceInfo));
-fullPanel.add(trackRecordBtn);
+        JPanel fullPanel = new JPanel(new GridLayout(1,2));
 
-// Compare btn
-JButton compareBtn = new JButton("Compare horses");
-//compareBtn.addActionListener(e -> new HorseRemoval_gui(raceInfo));
-fullPanel.add(compareBtn);
+        // Track records btn
+        JButton trackRecordBtn = new JButton("View horse stats");
+        trackRecordBtn.addActionListener(e -> new ViewHorsePerformances_gui(raceInfo));
+        fullPanel.add(trackRecordBtn);
 
-// Add the panel to the frame
-frame.add(fullPanel);
-// Set the frame visible
-frame.setVisible(true);
+        // Compare btn
+        JButton compareBtn = new JButton("Compare horses");
+        //compareBtn.addActionListener(e -> new HorseRemoval_gui(raceInfo));
+        fullPanel.add(compareBtn);
 
-}
+
+        frame.add(fullPanel);
+        frame.setVisible(true);
+
+    }
 }

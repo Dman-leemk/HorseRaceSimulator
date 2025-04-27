@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+
+/**
+ * A class used to organise the various effects that could be provided to the horse
+ * 
+ */
 class horseStatChangers
 {
     final double confidenceModifer;
@@ -24,17 +29,17 @@ class horseStatChangers
 public class Horse
 {
     //Fields of class Horse
-    private String horseName;
+    private final String horseName;
     private char horseSymbol;
-    private String colour;
-    private int breed;
-    private int horseShoe;
-    private int saddle;
-    private int bridle;   
+    private final String colour;
+    private final int breed;
+    private final int horseShoe;
+    private final int saddle;
+    private final int bridle;   
 
-    static final double baseConfidence = 0.5;
-    static final double baseSpeed = 0.5;
-    static final double baseEndurance = 0.5;
+    static final double BASECONFIDENCE = 0.5;
+    static final double BASESPEED = 0.5;
+    static final double BASEENDURANCE = 0.5;
 
     private double horseConfidence;
     private final double horseSpeed;
@@ -46,7 +51,7 @@ public class Horse
     private int currentFinishPostion;
     private int timeToFinish;
 
-    private ArrayList <Horse_stats> stats = new ArrayList<>();
+    private ArrayList <HorseStats> stats = new ArrayList<>();
 
     static horseStatChangers[] breedEffects = {
         new horseStatChangers(0.1,0.2,0.1),
@@ -83,21 +88,21 @@ public class Horse
         this.bridle = bridle;
 
         this.horseConfidence = 
-            baseConfidence + 
+            BASECONFIDENCE + 
             breedEffects[breed].confidenceModifer + 
             horseShoeEffects[horseShoe].confidenceModifer + 
             saddleEffects[saddle].confidenceModifer + 
             bridleEffects[bridle].confidenceModifer;
 
         this.horseSpeed = 
-            baseSpeed + 
+            BASESPEED + 
             breedEffects[breed].speedModifer + 
             horseShoeEffects[horseShoe].speedModifer + 
             saddleEffects[saddle].speedModifer +
             bridleEffects[bridle].speedModifer;
 
         this.horseEndurance = 
-            baseEndurance + 
+            BASEENDURANCE + 
             breedEffects[breed].enduranceModifer + 
             horseShoeEffects[horseShoe].enduranceModifer + 
             saddleEffects[saddle].enduranceModifer +
@@ -108,7 +113,17 @@ public class Horse
         this.currentFinishPostion = 0;
     }
     
-    public void raceFinished (int currentFinishPostion,int timeToFinish, track track)
+    /**
+     * Handles when the horse finishes the race
+     * It updates the win ratio, stores the win postion 
+     * and creates a new race entry in the history 
+     * 
+     * @param currentFinishPostion the postion the horse scored
+     * @param timeToFinish the amount of time the horse raced for
+     * @param track the information about the race track
+     * 
+     */
+    public void raceFinished (int currentFinishPostion,int timeToFinish, Track track)
     {
         this.timeToFinish = timeToFinish;
         if (currentFinishPostion == 1)
@@ -121,8 +136,29 @@ public class Horse
         }
         track.setBestTime(timeToFinish);
         this.currentFinishPostion = currentFinishPostion;
-        this.stats.add(new Horse_stats(track,currentFinishPostion,getAverageSpeed(),this.timeToFinish));
+        this.stats.add(new HorseStats(track,currentFinishPostion,getAverageSpeed(),this.timeToFinish));
     }
+
+    /**
+     * Handles when the horse falls during the race
+     * It updates the win ratio, stores the win postion as a fall
+     * and creates a new race entry in the history 
+     * 
+     * @param timeToFinish the amount of time the horse raced for
+     * @param track the information about the race track
+     * 
+     */
+    public void fall(int timeToFinish,Track track)
+    {
+        this.timeToFinish = timeToFinish;
+        this.lossCount ++;
+        this.currentFinishPostion = -1;
+        this.stats.add(new HorseStats(track,currentFinishPostion,getAverageSpeed(),this.timeToFinish));
+    }
+    
+
+
+    // Accessor methods
 
     public int getCurrentFinishPostion ()
     {
@@ -134,15 +170,6 @@ public class Horse
         return this.currentFinishPostion != 0;
     }
 
-    //Other methods of class Horse
-    public void fall(int timeToFinish,track track)
-    {
-        this.timeToFinish = timeToFinish;
-        this.lossCount ++;
-        this.currentFinishPostion = -1;
-        this.stats.add(new Horse_stats(track,currentFinishPostion,getAverageSpeed(),this.timeToFinish));
-    }
-    
     public double getConfidence()
     {
        return this.horseConfidence; 
@@ -222,7 +249,7 @@ public class Horse
         this.horseSymbol = newSymbol;
     }
 
-    public ArrayList <Horse_stats> getStats ()
+    public ArrayList <HorseStats> getStats ()
     {
         return this.stats;
     }

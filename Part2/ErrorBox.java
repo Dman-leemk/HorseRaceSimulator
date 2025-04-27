@@ -1,8 +1,13 @@
 import javax.swing.*;
 
-public class errorBox
+
+/** 
+ * Provides an error pop up wuth custom text
+ * 
+*/
+public class ErrorBox
 {
-    public errorBox (String message )
+    public ErrorBox (String message )
     {
         JFrame frame = new JFrame("Error");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
